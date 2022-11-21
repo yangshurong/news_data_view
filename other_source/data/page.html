@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <title>阳泉市人民政府信息公开</title>
+    <meta name="keywords" content="信息公开，政府信息公开">
+    <meta name="description" content="阳泉市人民政府门户网站开设政府信息公开平台，公众可随时检索、查阅。">
+    <meta name="lanmu" content="政府信息公开平台">
+    <link href="../../../../images/base.css" rel="stylesheet">
+    <link href="../../../../images/infodisc.css" rel="stylesheet">
+    <META HTTP-EQUIV='Pragma' CONTENT='no-cache'>
+    <META HTTP-EQUIV='Cache-Control' CONTENT='no-store, must-revalidate'>
+    <meta name="SiteName" content="阳泉市人民政府门户网站">
+    <meta name="SiteDomain" content="www.yq.gov.cn">
+    <meta name="SiteIDCode" content="1403000041 ">
+    <meta name="ColumnName" content="政府信息公开">
+    <meta name="ColumnDescription" content="政府信息公开平台">
+    <meta name="ColumnKeywords" content="政府信息公开">
+    <meta name="ColumnType" content="信息公开">
+    <meta name="channel" content="信息公开">
+<script id="_trs_ta_js" src="//ta.trs.cn/c/js/ta.js?mpid=4799" async="async" defer="defer"></script> 
+</head>
+
+<body>
+    <!-- Information Disclosure Wrap -->
+    <div class="information-disclosure-wrap">
+        <div class="information-disclosure-box">
+                <div class="headerTop_svxxgk">
+                <img src="../../../../images/headerTop_svxxgk_1.png" alt="" />
+                <span><a href="http://www.yq.gov.cn/" style="color:white">阳泉市人民政府</a></span>
+            </div>
+            <div class="infodisc_title">
+                <h1><img src="../../../../images/img-xxgk-title_4.png" /></h1>
+            </div>
+            <div class="infodisc-box">
+                <!-- file search -->
+                    <script src="../../../../images/jquery.min.js"></script>
+<div class="infodisc-search">
+
+    <div class="infodisc-search--form">
+                        <input id="infoDiscKwd" name="idk" class="infodisc-search--form_input" value="" placeholder="信息名称" maxlength="255" autocomplete="off" />
+                        <input id="infoDiscSbt" value="" class="infodisc-search--form_submit" type="button" />
+                </div>
+                </div>
+<script>
+var siteid="10";
+var nowPage=1;
+var sword= "";
+$(document).ready(function(){
+$("#infoDiscSbt").click(function(){
+sword= $("#infoDiscKwd").val();
+search(sword,nowPage,siteid);
+})
+
+}); 
+
+function search(sword,nowPage,siteid){
+debugger;
+   var postData={"sword":sword,"nowPage":nowPage,"siteid":siteid};//data: postData,
+var getData = "?sword="+sword+"&nowPage="+nowPage+"&siteid="+siteid;
+   $.ajax({
+      url: "/search/commonSearch.jsp"+getData ,
+      type: "get",
+      dataType: 'json',
+      
+      timeout: 5000,
+      success: function (jsonData) {
+          var curpage=jsonData.nowPage;
+          var pageCount=jsonData.pageCount;
+          var listdatas=jsonData.list_datas;
+          var html="";
+
+          for(var i=0;i<listdatas.length;i++){
+            var _url=listdatas[i].docPuburl;
+            var _title=listdatas[i].title;
+            var _time=listdatas[i].PUBDATE.substring(0,10);
+            html+="<li><i></i><a href='"+_url+"' target='_blank' title='"+_title+"'>"+_title+"</a>";
+            html+="<em>";
+            html+=_time;
+            html+="</em></li>";
+          }
+          $("#searchcontent").html(html);
+          createPage(curpage,pageCount);
+          $(".mend-search-are").val(getUrlParam("sword"));
+$("#searchDiv").show();
+$("#contentDiv").hide();
+      },
+      error:function(){
+        $("#searchcontent").html("没有检索到内容，请更换检索词！");
+$("#searchDiv").show();
+$("#contentDiv").hide();
+      }
+
+   });
+}; 
+   function createPage(curpage,pageCount){
+    if(pageCount<=1){
+      return false;
+    }
+    var html="<span id='pageSerialNum' class='shanxi-gov-page-form'>第"+curpage+"页</span>&nbsp;<span id='pageTotalNum' class='shanxi-gov-page-form'>共"+pageCount+"页</span>&nbsp;";
+    html+="<a class='' href='javascript:goPage("+1+","+pageCount+","+pageCount+")' style='width:66px'>首页</a>&nbsp;";
+    html+="<a class='' href='javascript:goPage("+(curpage-1)+","+pageCount+")' style='width:66px'>上一页</a>&nbsp;";
+    html+="<a class='' href='javascript:goPage("+(curpage+1)+","+pageCount+")' style='width:66px'>下一页</a>&nbsp;";
+    html+="<a class='' href='javascript:goPage("+pageCount+","+pageCount+")' style='width:66px'>尾页</a>&nbsp;";
+    html+="<span class='shanxi-gov-page-form'>跳到第<input type='text' size='4' class='shanxi-gov-page-form-text' id='toPage' title='请输入您需要跳转的页数' />页<input class='shanxi-gov-page-form-btn' type='button' value='GO' onclick='goCPage("+pageCount+");' /></span>";
+
+      $("#page").html(html);
+   }
+   function goPage(num,pageCount){
+      if(num<=0){num=1;}else if(num>=pageCount){num=pageCount;}
+      //window.location.href="/wzgl/wzjs/?sword="+sword+"&nowPage="+num+"&siteid="+siteid;
+search(sword,num,siteid);
+   }
+  function goCPage(pageCount){
+      var num=$("#toPage").val();
+      if(num<=0){num=1;}else if(num>=pageCount){num=pageCount;}
+search(sword,num,siteid);
+   }
+   //获取url中的参数
+function getUrlParam(name) {
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+  var queryPara = window.location.search.substr(1);
+  queryPara = decodeURI(queryPara);
+  var r = queryPara.match(reg);  //匹配目标参数
+  if (r != null) return unescape(r[2]); return ""; //返回参数值
+}
+</script> 
+                <!-- file search -->
+                <!-- file content -->
+                <dl class="infodisc-content">
+                <dt>
+                     <div class="infodisc-con_navitem">
+                            <a href="javascript:;">
+                                <i class="icon-navitem_n99"></i>
+                                <b>政&nbsp;&nbsp;&nbsp;策</b>
+                                <span></span>
+                            </a>
+                        </div>
+                        <ul class="infodisc-con_navcon">
+                            
+                            <li><i></i><a href="../../../gzk/sjzfgz/" title="市级政府规章">市级政府规章</a></li>
+                            
+                        </ul>   
+
+
+
+
+ 
+                        <!-- 1 -->
+                     
+                        
+                        
+                        <!-- 1 -->
+                        <div class="infodisc-con_navitem">
+                            <a href="../../../zfxxgkzn/">
+                                <i class="icon-navitem_n1"></i>
+                                <b>政府信息公开指南</b>
+                            </a>
+                        </div>
+                        <!-- 1 -->
+                        <!-- 1 -->
+                        <div class="infodisc-con_navitem">
+                            <a href="../../../zfxxgkzd/">
+                                <i class="icon-navitem_n2"></i>
+                                <b>政府信息公开制度</b>
+                            </a>
+                        </div>
+                        <!-- 1 -->
+                        <!-- 1 -->
+                        <div class="infodisc-con_navitem">
+                            <a href="javascript:;">
+                                <i class="icon-navitem_n3"></i>
+                                <b>法定主动公开内容</b>
+                                <span></span>
+                            </a>
+                        </div>
+                        <ul class="infodisc-con_navcon">
+                            
+                            <li><i></i><a href="../" title="履职依据">履职依据</a></li>
+                            
+                            <li><i></i><a href="../../jgjj/" title="机关简介">机关简介</a></li>
+                            
+                            <li><i></i><a href="../../tjxx_45358/" title="统计信息">统计信息</a></li>
+                            
+                            <li><i></i><a href="http://yq.sxzwfw.gov.cn/icity/govservice/powerlist" title="权力责任清单">权力责任清单</a></li>
+                            
+                            <li><i></i><a href="../../cfqzxx/" title="处罚强制信息">处罚强制信息</a></li>
+                            
+                            <li><i></i><a href="../../czxx_45363/" title="财政信息">财政信息</a></li>
+                            
+                            <li><i></i><a href="../../sfxm/" title="收费项目">收费项目</a></li>
+                            
+                            <li><i></i><a href="../../zfcg_45368/" title="政府采购">政府采购</a></li>
+                            
+                            <li><i></i><a href="../../zdxm/" title="重大项目">重大项目</a></li>
+                            
+                            <li><i></i><a href="../../zdhy/" title="重大会议信息公开">重大会议信息公开</a></li>
+                            
+                            <li><i></i><a href="../../zdjcygk/" title="重大决策预公开">重大决策预公开</a></li>
+                            
+                            <li><i></i><a href="../../zdmsxx/" title="重点领域公开">重点领域公开</a></li>
+                            
+                            <li><i></i><a href="../../gyqy/" title="国有企业">国有企业</a></li>
+                            
+                            <li><i></i><a href="../../zkly/" title="招考录用">招考录用</a></li>
+                            
+                            <li><i></i><a href="../../zfgb1/" title="政府公报">政府公报</a></li>
+                            
+                            <li><i></i><a href="../../xwfbh_45394/" title="新闻发布会">新闻发布会</a></li>
+                            
+                            <li><i></i><a href="../../yqfk/" title="疫情防控">疫情防控</a></li>
+                            
+                            <li><i></i><a href="../../qtzxxx/" title="其他专项信息">其他专项信息</a></li>
+                            
+                        </ul>
+ 
+                        <!-- 1 -->
+                        <div class="infodisc-con_navitem">
+                            <a href="JavaScript:;">
+                                <i class="icon-navitem_n7"></i>
+                                <b class="nav-s">政府文件</b>
+                                <span></span>
+                            </a>
+                        </div>
+                        <div class="infodisc-con_navcon">
+                            <!-- 1 -->
+                            <div class="tree-menus-itembox oflow-hd">
+                                <p class="tree-menus-itembox-title" alt="按体裁分类">按体裁分类</p>
+                                <div class="tree-menus-itembox-cnt">
+                                    <ul id="tree_types" class="filetree single-filetree treeview">
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/258/index_4986.shtml">公告(2325)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/259/index_4986.shtml">通告(183)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/260/index_4986.shtml">通知(779)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/261/index_4986.shtml">通报(33)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/262/index_4986.shtml">议案(4)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/263/index_4986.shtml">报告(73)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/264/index_4986.shtml">请示(18)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/265/index_4986.shtml">批复(12)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/266/index_4986.shtml">意见函(4)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/267/index_4986.shtml">会议纪要(5)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/762/index_4986.shtml">阳政发(35)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/763/index_4986.shtml">阳政函(7)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/764/index_4986.shtml">阳政通字(4)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/766/index_4986.shtml">政办发(157)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/765/index_4986.shtml">政办函(41)</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="http://xxgk.yq.gov.cn/216/268/index_4986.shtml">其他(1876)</a>
+                                        </li>
+                                        
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- 1 -->
+                            <!-- 1 -->
+                            <div class="tree-menus-itembox oflow-hd">
+                                <p class="tree-menus-itembox-title" alt="按主题分类">按主题分类</p>
+                                <div class="tree-menus-itembox-cnt">
+                                    <ul id="tree_theme" class="filetree modfi-filetree treeview">
+
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">综合政务</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/82/83/index_4986.shtml">政务督查(35)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/82/84/index_4986.shtml">应急管理(543)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/82/85/index_4986.shtml">电子政务(52)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/82/86/index_4986.shtml">文秘工作(15)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/82/87/index_4986.shtml">保密工作(3)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/82/88/index_4986.shtml">信访(135)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/82/89/index_4986.shtml">参事、文史(4)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/82/249/index_4986.shtml">法制(77)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/82/250/index_4986.shtml">档案管理(46)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/82/251/index_4986.shtml">机关事务(56)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">国民经济管理、国有...</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/91/92/index_4986.shtml">宏观经济运行(248)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/91/93/index_4986.shtml">经济体制改革(42)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/91/94/index_4986.shtml">统计(339)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/91/95/index_4986.shtml">物价(19)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/91/98/index_4986.shtml">重大建设项目(689)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/91/253/index_4986.shtml">国民经济发展规...(91)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">财政、金融、审计</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/99/100/index_4986.shtml">财政(614)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/99/101/index_4986.shtml">税务(29)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/99/102/index_4986.shtml">银行(155)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/99/105/index_4986.shtml">保险(8)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/99/106/index_4986.shtml">信用(18)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/99/107/index_4986.shtml">审计(81)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">国土资源、能源</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/109/110/index_4986.shtml">土地(56)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/109/111/index_4986.shtml">矿产(23)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/109/112/index_4986.shtml">水资源(8)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/109/114/index_4986.shtml">煤炭(91)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/109/115/index_4986.shtml">石油与天然气(68)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/109/116/index_4986.shtml">电力(29)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/109/118/index_4986.shtml">新能源(9)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">农业、林业、水利</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/119/120/index_4986.shtml">农业、畜牧业、渔业(227)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/119/121/index_4986.shtml">林业(130)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/119/122/index_4986.shtml">水利、水务(442)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">工业、交通</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/124/125/index_4986.shtml">机械制造与重工业(6)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/124/127/index_4986.shtml">化工(3)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/124/130/index_4986.shtml">信息产业（含电信）(14)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/124/131/index_4986.shtml">公路(59)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/124/133/index_4986.shtml">铁路(22)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">商贸、海关、旅游</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/137/138/index_4986.shtml">对外经贸合作(41)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/137/139/index_4986.shtml">国内贸易、供销(35)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/137/141/index_4986.shtml">海关(4)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/137/142/index_4986.shtml">检验、检疫(5)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/137/143/index_4986.shtml">旅游、服务业(310)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">市场监管、安全生产监管</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/145/146/index_4986.shtml">工商(730)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/145/147/index_4986.shtml">质量监督(150)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/145/148/index_4986.shtml">标准(10)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/145/149/index_4986.shtml">食品药品监管(142)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/145/150/index_4986.shtml">安全生产监管(121)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">城乡建设、环境保护</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/152/153/index_4986.shtml">建设规划(60)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/152/154/index_4986.shtml">城乡建设（含住房）(119)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/152/155/index_4986.shtml">环境监测、保护...(193)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/152/156/index_4986.shtml">节能与资源综合利用(18)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/152/157/index_4986.shtml">气象、水文、测...(142)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">科技、教育</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/159/160/index_4986.shtml">科技(904)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/159/161/index_4986.shtml">教育(650)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/159/162/index_4986.shtml">知识产权(7)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/159/163/index_4986.shtml">其他(4)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">文化、广电、新闻出版</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/164/165/index_4986.shtml">文化(112)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/164/166/index_4986.shtml">文物(21)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/164/167/index_4986.shtml">新闻出版(6)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/164/168/index_4986.shtml">广播、电影、电视(12)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">卫生、体育</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/170/171/index_4986.shtml">卫生(873)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/170/172/index_4986.shtml">医药管理(83)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/170/173/index_4986.shtml">体育(437)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">人口与计划生育、妇...</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/175/176/index_4986.shtml">人口(16)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/175/254/index_4986.shtml">计划生育(5)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/175/177/index_4986.shtml">妇女(9)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/175/255/index_4986.shtml">儿童(10)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">劳动、人事、监察</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/179/180/index_4986.shtml">劳动就业(49)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/179/181/index_4986.shtml">社会保障(83)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/179/182/index_4986.shtml">人事工作(22)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/179/184/index_4986.shtml">监察(5)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/179/185/index_4986.shtml">纠正不正之风(19)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">公安、安全、司法</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/187/188/index_4986.shtml">公安(23)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/187/189/index_4986.shtml">国家安全(6)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/187/190/index_4986.shtml">司法(42)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">民政、扶贫</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/192/193/index_4986.shtml">减灾救济(55)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/192/194/index_4986.shtml">优抚安置(37)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/192/195/index_4986.shtml">社会福利(47)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/192/196/index_4986.shtml">行政区域与地名(16)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/192/197/index_4986.shtml">社团管理(27)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/192/198/index_4986.shtml">扶贫(47)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">民族、宗教</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/200/201/index_4986.shtml">民族事务(3)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/200/202/index_4986.shtml">宗教事务(2)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">对外事务</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/203/204/index_4986.shtml">外交、外事(17)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                        <li class="expandable">
+                                            <div class="hitarea expandable-hitarea"></div> <span class="folder">港澳台侨工作</span>
+                                            <ul style="display: none;">
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/208/210/index_4986.shtml">对台工作(2)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+                                                
+                                              <li class="expandable">
+                                                    <span class="file">
+                                                               <a href="http://xxgk.yq.gov.cn/81/208/211/index_4986.shtml">侨务工作(2)</a>
+                                                            </span> 
+                                               </li>
+                                               
+                                            
+
+                                            </ul>
+                                        </li>
+
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                            <li class="expandable">
+                                                <span class="file">
+                                                   <a href="http://xxgk.yq.gov.cn/81/215/index_4986.shtml">其他(7012)</a>
+                                                </span> 
+                                             </li>
+                                        
+                                     
+
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- 1 -->
+                        </div>
+                        <!-- 1 -->
+                        <!-- 1 -->
+                        <div class="infodisc-con_navitem">
+                            <a href="../../../zfxxgknb_45398/">
+                                <i class="icon-navitem_n4"></i>
+                                <b>政府信息公开年报</b>
+                            </a>
+                        </div>
+                        <!-- 1 -->
+                        <!-- 1 -->
+                        <div class="infodisc-con_navitem">
+                            <a href="../../../xqbmlj/">
+                                <i class="icon-navitem_n6"></i>
+                                <b>政府信息公开目录</b>
+                            </a>
+                        </div>
+                        <!-- 1 -->
+                      
+         <div class="infodisc-con_navitem">
+                            <a href="javascript:;">
+                                <i class="icon-navitem_n3"></i>
+                                <b>依申请公开</b>
+                                <span></span>
+                            </a>
+                        </div>
+                        <ul class="infodisc-con_navcon">
+                            
+                            <li><i></i><a href="../../../ysqgk/sqzn/" title="申请指南">申请指南</a></li>
+                            
+                            <li><i></i><a href="../../../ysqgk/sqlc/" title="申请流程">申请流程</a></li>
+                            
+                        </ul>   
+
+                   <!-- 1 -->
+                        <div class="infodisc-con_navitem">
+                            <a href="http://xxgk.yq.gov.cn/yqsrmzf1/sdlyxxgk/">
+                                <i class="icon-navitem_n1"></i>
+                                <b>试点领域信息公开</b>
+                            </a>
+                        </div>
+                        <!-- 1 -->
+ <!-- 1 -->
+                        <div class="infodisc-con_navitem">
+                            <a href="http://xxgk.yq.gov.cn/yqsrmzf1/fdzdgknr_45346/qtzxxx/">
+                                <i class="icon-navitem_n1"></i>
+                                <b>政府网站年度报表</b>
+                            </a>
+                        </div>
+                        <!-- 1 -->
+                    </dt>
+
+<style>
+.infodisc-con_navcon>li {padding-left:70px;font-size:15px;font-weight:700;}
+</style>
+                    <dd id="contentDiv">
+                        <!-- 1 -->
+                        <dl class="infodisc-con_cntitem">
+                            <dt><span>市政府办公室文件</span></dt>
+                            <dd>
+                                <ul class="infodisc-con_cntitem--list">
+                                    
+                                    <li>
+                                        <a href="./202205/t20220509_1336948.shtml" target="_blank" title="关于印发2022年市级重点工程项目清单的通知">关于印发2022年市级重点工程项目清单的通知</a>
+                                        <em>2022-05-09</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202205/t20220509_1336935.shtml" target="_blank" title="关于推进人工影响天气工作高质量发展的实施方案">关于推进人工影响天气工作高质量发展的实施方案</a>
+                                        <em>2022-04-28</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202204/t20220425_1330992.shtml" target="_blank" title="关于修正《关于印发支持第一产业高质量高速度发展若干措施的通知》部分条款的补充通知">关于修正《关于印发支持第一产业高质量高速度发展若干措施的通知》部分条款的...</a>
+                                        <em>2022-04-25</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202204/t20220415_1326892.shtml" target="_blank" title="关于成立阳泉市减税降费工作专班的通知">关于成立阳泉市减税降费工作专班的通知</a>
+                                        <em>2022-04-15</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202203/t20220324_1317414.shtml" target="_blank" title="关于成立阳泉市盂县上社140万千瓦抽水蓄能项目工作领导小组及工作专班的通知">关于成立阳泉市盂县上社140万千瓦抽水蓄能项目工作领导小组及工作专班的通知</a>
+                                        <em>2022-03-24</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202203/t20220324_1317405.shtml" target="_blank" title="关于进一步深化“证照分离”改革激发市场主体发展活力的通知">关于进一步深化“证照分离”改革激发市场主体发展活力的通知</a>
+                                        <em>2022-03-24</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202203/t20220310_1310548.shtml" target="_blank" title="关于印发阳泉市高密度中等城市交通拥堵治理与绿色出行试点实施方案和阳泉市智能网联重载货运车路协同发展试点实施方案的通知">关于印发阳泉市高密度中等城市交通拥堵治理与绿色出行试点实施方案和阳泉市智...</a>
+                                        <em>2022-03-10</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202203/t20220310_1310546.shtml" target="_blank" title="关于印发阳泉市生产安全事故应急预案的通知">关于印发阳泉市生产安全事故应急预案的通知</a>
+                                        <em>2022-03-10</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202203/t20220310_1310544.shtml" target="_blank" title="关于印发阳泉市自然灾害救助应急预案的通知">关于印发阳泉市自然灾害救助应急预案的通知</a>
+                                        <em>2022-03-10</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202203/t20220310_1310542.shtml" target="_blank" title="关于印发阳泉市非煤矿山生产安全事故应急预案的通知">关于印发阳泉市非煤矿山生产安全事故应急预案的通知</a>
+                                        <em>2022-03-10</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202203/t20220310_1310540.shtml" target="_blank" title="关于印发阳泉市危险化学品事故应急预案的通知">关于印发阳泉市危险化学品事故应急预案的通知</a>
+                                        <em>2022-03-10</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202203/t20220310_1310538.shtml" target="_blank" title="关于印发阳泉市冶金工贸行业生产安全事故应急预案的通知">关于印发阳泉市冶金工贸行业生产安全事故应急预案的通知</a>
+                                        <em>2022-03-10</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202203/t20220310_1310456.shtml" target="_blank" title="关于印发阳泉市煤矿生产安全事应急预案的通知">关于印发阳泉市煤矿生产安全事应急预案的通知</a>
+                                        <em>2022-03-10</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202203/t20220310_1310382.shtml" target="_blank" title="关于2021年度全市政务公开工作考核情况的通报">关于2021年度全市政务公开工作考核情况的通报</a>
+                                        <em>2022-03-10</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202203/t20220307_1308747.shtml" target="_blank" title="关于印发阳泉市“十四五”电动汽车充换电基础设施规划的通知">关于印发阳泉市“十四五”电动汽车充换电基础设施规划的通知</a>
+                                        <em>2022-03-07</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202203/t20220301_1306370.shtml" target="_blank" title="关于阳泉市2021年法治政府建设情况报告">关于阳泉市2021年法治政府建设情况报告</a>
+                                        <em>2022-03-01</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202203/t20220301_1306360.shtml" target="_blank" title="关于阳泉市2021年法治政府建设情况报告">关于阳泉市2021年法治政府建设情况报告</a>
+                                        <em>2022-03-01</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202202/t20220225_1304789.shtml" target="_blank" title="关于印发贯彻落实新时代支持山西太行革命老区振兴发展实施意见的工作方案的通知">关于印发贯彻落实新时代支持山西太行革命老区振兴发展实施意见的工作方案的通知</a>
+                                        <em>2022-02-25</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202202/t20220218_1301594.shtml" target="_blank" title="关于调整阳泉市保护国家通信光缆安全领导组成员的通知">关于调整阳泉市保护国家通信光缆安全领导组成员的通知</a>
+                                        <em>2022-02-18</em>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="./202202/t20220218_1301568.shtml" target="_blank" title="关于印发阳泉市地质灾害防治“十四五”规划的通知">关于印发阳泉市地质灾害防治“十四五”规划的通知</a>
+                                        <em>2022-02-18</em>
+                                    </li>
+                                    
+                                   
+                                </ul>
+                            </dd>
+                        </dl>
+                        <!-- 1 -->
+                        <!-- Pageion -->
+                        <div class="shanxi-gov-page-box">
+                          <style>
+.nrlb-page .pageUp{
+	background:url(../../../../images/gk-pic-page1.png) no-repeat 6px 3px;
+}
+.nrlb-page .pageDown{
+	background:url(../../../../images/gk-pic-page2.png) no-repeat 40px 3px;
+}
+</style>
+<script language="JavaScript">
+	var currentPage = 0;//所在页从0开始
+	var prevPage = currentPage-1//上一页
+	var nextPage = currentPage+1//下一页
+	var countPage = 38//共多少页
+	if(countPage>1&&currentPage!=0&&currentPage!=1)//当前页是第1页后边的
+	{ 
+		nums();document.write("<a href=\"index.shtml\">首页</a><a class='pageUp' href=\"index"+"_" + prevPage + "."+"shtml\">上页</a>");
+		//document.write("<li><a>" +nextPage+ "</a></li>");
+	}
+	else if(countPage>1&&currentPage!=0&&currentPage==1)//当前页是第2页
+	{ 
+		nums();document.write("<a href=\"index.shtml\">首页</a><a class='pageUp' href=\"index.shtml\">上页</a>");
+		//document.write("<li><a>" +nextPage+ "</a></li>");
+	}
+	else if(countPage==1){
+		nums();document.write("<a href=\"index.shtml\">首页</a><a class='pageUp' href=\"index.shtml\">上页</a>");
+		//document.write("<li><a>" +nextPage+ "</a></li>");
+                }
+	else
+	{
+		nums();document.write("<a href=\"index.shtml\">首页</a><a class='pageUp' href=\"index.shtml\">上页</a>");
+        //document.write("<li><a>" +nextPage+ "</a></li>");
+	}//当前页是首页
+	if(countPage>1&&currentPage!=(countPage-1))//如果不是最后一页
+	{
+		document.write("<a class='pageDown' href=\"index"+"_" + nextPage + "."+"shtml\">下页</a><a href=\"index_" + (countPage-1) + ".shtml\">尾页</a>");
+		//nums();
+	}
+	else if(countPage==1){
+		document.write("<a class='pageDown' href='#'>下页</a><a href='#'> 尾页</a>");//nums();
+        }
+	else
+	{
+		document.write("<a class='pageDown' href='#'>下页</a><a href='#'> 尾页</a>");
+		//nums();
+	}
+	document.write("<a style='width:130px;background-color:#fff;'><span>&nbsp;&nbsp;转到第&nbsp;<input type='text' id='num' value='' style='border: 1px solid rgb(231, 238, 251); border-image: none; width: 30px; height: 25px; text-align: center;' />&nbsp;页</a>")
+	document.write("<a style='width:40px;background-color:#fff;'><input type='submit' value='GO' onclick='toPage()' style='width: 30px; height: 25px;' /></a> </span>")
+	
+	function  nums(){
+		document.write("<a style='width:150px;background-color:#fff;'><span>共"+countPage+"页&nbsp;&nbsp;当前第"+nextPage+"页</span></a>");
+	}
+	
+	function toPage(){
+		var _num = document.getElementById("num").value;
+		var str = "index"+"_"+(_num-1)+"."+"shtml";
+		var url = location.href.substring(0,location.href.lastIndexOf("/")+1);
+		if(_num<=1||_num==null)
+		location.href = url+"index"+"."+"shtml";
+		else if(_num>countPage)
+		alert("本频道最多"+countPage+"页");
+		else
+		location.href = url+str;
+	}
+</script> 
+
+                        </div>
+                        <!-- /Pageion -->
+                    </dd>
+                    <dd id="searchDiv" style="display: none;">
+                        <!-- 1 -->
+                        <dl class="infodisc-con_cntitem">
+
+                            <dd>
+                                <ul class="infodisc-con_cntitem--list"  id="searchcontent">
+                                </ul>
+                            </dd>
+                        </dl>
+                        <!-- 1 -->
+                        <!-- Pageion -->
+                        <div class="shanxi-gov-page-box" id="page">
+                        </div>
+                        <!-- /Pageion --> 
+                    </dd>
+                </dl>
+                <!-- file content -->
+            </div>
+        </div>
+    </div>
+<iframe src="http://www.yq.gov.cn/index_5193.shtml" frameBorder="0" scrolling="yes" height="155px" width="100%"></iframe>
+    <!-- Information Disclosure Wrap -->
+    <script src="../../../../images/jquery_4.min.js"></script>
+    <script src="../../../../images/infodisc_3.js"></script>
+    <link rel="stylesheet" href="../../../../images/jquery.treeview.css">
+    <script src='../../../../images/jquery.cookie.js'></script>
+    <script src='../../../../images/jquery.treeview.js'></script>
+    
+    
+
+</body>
+
+</html>
